@@ -23,9 +23,9 @@ import matplotlib.pyplot as plt
 import random
 import time
 
-class BSR(BaseEstimator,RegressorMixin):
+class BSR(RegressorMixin, BaseEstimator):
     def __init__(self, treeNum=3, itrNum=5000, alpha1 = 0.4, alpha2=0.4,  
-                 beta=-1, disp=False, val=100):
+                 beta=-1, disp=False, val=100, max_time=2*60*60):
         self.treeNum = treeNum
         self.itrNum = itrNum
         self.alpha1 = alpha1
@@ -33,6 +33,7 @@ class BSR(BaseEstimator,RegressorMixin):
         self.beta = beta #WGL
         self.disp = disp #WGL
         self.val = val #WGL
+        self.max_time = max_time #WGL
         
     def model(self, last_ind=1):
         modd =[]
@@ -95,8 +96,10 @@ class BSR(BaseEstimator,RegressorMixin):
         alpha2 = self.alpha2
         beta = self.beta
        
+        tic = time.time()
+
         if self.disp: print('starting training...')
-        while len(trainERRS)<MM:
+        while len(trainERRS)<MM and time.time()-tic < self.max_time:
             
             
             n_feature = train_data.shape[1]
@@ -168,10 +171,9 @@ class BSR(BaseEstimator,RegressorMixin):
             totList = []
             nodeCounts = []
             
-            tic = time.time()
             
             if self.disp: print('while total < ',self.val)
-            while total < self.val:
+            while total < self.val and time.time()-tic < self.max_time:
                 Roots = []  # list of current components
                 # for count in np.arange(K):
                 #     Roots.append(RootLists[count][-1])
@@ -290,6 +292,8 @@ def symreg(K,MM, train_data,test_data, train_y, test_y, disp=True):
     testERRS = []
     ROOTS = []
     
+    tic = time.time()
+
     while len(trainERRS)<MM:
         
         
@@ -370,9 +374,8 @@ def symreg(K,MM, train_data,test_data, train_y, test_y, disp=True):
         dentList = []
         nodeCounts = []
         
-        tic = time.time()
         
-        while total < val:
+        while total < val and time.time()-tic < self.max_time:
             Roots = []  # list of current components
             # for count in np.arange(K):
             #     Roots.append(RootLists[count][-1])
