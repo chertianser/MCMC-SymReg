@@ -36,10 +36,11 @@ class BSR(RegressorMixin, BaseEstimator):
         self.max_time = max_time #WGL
         
     def model(self, last_ind=1):
-        modd =[]
+        modd =[str(self.betas_[-last_ind][0]) ]
         for i in  range(self.treeNum):
-            modd.append(Express(self.roots_[-last_ind][i]))
-        return(modd)
+            modd.append(str(self.betas_[-last_ind][i+1]) + '*'
+                        +Express(self.roots_[-last_ind][i]))
+        return('+'.join(modd))
             
     def complexity(self):
         compl = 0
