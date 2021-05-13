@@ -1218,7 +1218,14 @@ def newProp(Roots, count, sigma, y, indata, n_feature, Ops, Op_weights, Op_type,
             new_outputs[:, i] = temp
             old_outputs[:, i] = temp
 
-    if np.linalg.matrix_rank(new_outputs) < K:
+    # WGL: some kind of error sometimes arises calculating the rank of 
+    # new outputs. Catching this for now and returning.
+    try:
+        if np.linalg.matrix_rank(new_outputs) < K:
+            Root = oldRoot
+            return [False, sigma, copy.deepcopy(oldRoot), sigma_a, sigma_b]
+    except Exception as e:
+        print('WARNING:',e)
         Root = oldRoot
         return [False, sigma, copy.deepcopy(oldRoot), sigma_a, sigma_b]
 

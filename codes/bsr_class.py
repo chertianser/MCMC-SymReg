@@ -25,7 +25,10 @@ import time
 
 class BSR(RegressorMixin, BaseEstimator):
     def __init__(self, treeNum=3, itrNum=5000, alpha1 = 0.4, alpha2=0.4,  
-                 beta=-1, disp=False, val=100, max_time=2*60*60):
+                 beta=-1, disp=False, val=100, max_time=2*60*60,
+                 Ops = ['inv', 'ln', 'neg', 'sin', 'cos', 'exp', 'square',
+                        'cubic', '+', '*']
+                 ):
         self.treeNum = treeNum
         self.itrNum = itrNum
         self.alpha1 = alpha1
@@ -34,6 +37,7 @@ class BSR(RegressorMixin, BaseEstimator):
         self.disp = disp #WGL
         self.val = val #WGL
         self.max_time = max_time #WGL
+        self.Ops = Ops #WGL
         
     def model(self, last_ind=1):
         modd =[str(self.betas_[-last_ind][0]) ]
@@ -111,8 +115,8 @@ class BSR(RegressorMixin, BaseEstimator):
             beta = -1
             '''
             
-            Ops = ['inv', 'ln', 'neg', 'sin', 'cos', 'exp', 'square', 'cubic', '+', '*']
-            Op_weights = [1.0/len(Ops)] * len(Ops)
+            # Ops = ['inv', 'ln', 'neg', 'sin', 'cos', 'exp', 'square', 'cubic', '+', '*']
+            Op_weights = [1.0/len(self.Ops)] * len(self.Ops)
             Op_type = [1, 1, 1, 1, 1, 1, 1, 1, 2, 2]
             
             
@@ -137,7 +141,7 @@ class BSR(RegressorMixin, BaseEstimator):
             
                 # grow a tree from the Root node
                 if self.disp: print('grow a tree from the Root node')
-                grow(Root, n_feature, Ops, Op_weights, Op_type, beta, sigma_a, sigma_b)
+                grow(Root, n_feature, self.Ops, Op_weights, Op_type, beta, sigma_a, sigma_b)
                 # Tree = genList(Root)
             
                 # put the root into list
@@ -189,7 +193,8 @@ class BSR(RegressorMixin, BaseEstimator):
             
                     # the returned Root is a new copy
                     if self.disp: print('newProp...')
-                    [res, sigma, Root, sigma_a, sigma_b] = newProp(Roots, count, sigma, train_y, train_data, n_feature, Ops,
+                    [res, sigma, Root, sigma_a, sigma_b] = newProp(Roots, count,
+                            sigma, train_y, train_data, n_feature, self.Ops,
                                                                    Op_weights, Op_type, beta, sigma_a, sigma_b)
                     if self.disp:
                         print("res:",res)
