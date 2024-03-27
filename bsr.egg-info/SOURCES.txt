@@ -1,0 +1,11 @@
+README.md
+setup.py
+bsr.egg-info/PKG-INFO
+bsr.egg-info/SOURCES.txt
+bsr.egg-info/dependency_links.txt
+bsr.egg-info/top_level.txt
+codes/BSR.py
+codes/__init__.py
+codes/bsr_class.py
+codes/funcs.py
+codes/simulations.py

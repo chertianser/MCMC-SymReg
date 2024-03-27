@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: bsr
+Version: 0.1.1.1
+Summary: A Bayesian MCMC based Symbolic Regression Algorithm
+Home-page: https://github.com/ying531/MCMC-SymReg
+Author: Ying Jin
+Author-email: yjin1827@gmail.com
